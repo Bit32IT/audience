@@ -22,8 +22,6 @@ module Audience
       def remove(_member)
         raise NotImplementedError
       end
-
-      alias delete remove
     end
   end
 end
