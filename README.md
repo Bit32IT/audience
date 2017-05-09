@@ -8,6 +8,9 @@ to the segment. This decouples the segmentation interface from the
 implementation of the underlying grouping, reducing code repetition across your
 application.
 
+Audience is built on Rails, but otherwise does not assume any particular
+database or ORM.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -24,9 +27,147 @@ Or install it yourself as:
 
     $ gem install audience
 
-## Usage
+In your user or member model, add:
 
-TODO: Write usage instructions here
+```ruby
+class User
+  include Audience::Segmentable
+end
+```
+
+## Basic Segment
+
+Suppose we want to send an email to all female users who are between the age of
+18 - 25 who have been registered on the site more than a year. Kind of a pain
+right? We can define this kind of segment easily with Audience:
+
+```ruby
+module Audience
+  module Segment
+    class LoyalFemaleMillenials < Base
+      def members
+        User.where(gender: 'F', age: 18..25).where("created_at > ?", 1.year.ago)
+      end
+
+      def include?(user)
+        user.gender == 'F' &&
+          (18..25).include?(user.age) &&
+          user.created_at < 1.year.ago
+      end
+    end
+  end
+end
+```
+
+Now that we've defined the segment, let's register it with a unique name:
+
+```ruby
+Audience.register_segment :loyal_female_millenials, Audience::Segment::LoyalFemaleMillenials.new
+```
+
+Now we can iterate through all users in this segment like so to send them an email:
+
+```ruby
+User.segment(:loyal_female_millenials).each do |user|
+  MarketingEmailMailer.campaign(user).deliver_later!
+end
+```
+
+We can also check if a specific user belongs to this segment:
+
+```ruby
+if curent_user.in_segment?(:loyal_female_millenials)
+  @show_marketing_blurb = true
+end
+```
+
+## Mutable Segments
+
+Suppose you have a segment defined by membership in an arbitrarily chosen marketing group.
+You want to be able to add and remove users from this segment easily. Let's define a segment
+that allows this to be done easily without leaking the implementation all over the app.
+
+```ruby
+module Audience
+  module Segment
+    class ArbitraryMarketingGroup
+      def members
+        group.members
+      end
+
+      def include?(user)
+        group.members.include?(user)
+      end
+
+      def add(user)
+        group.add(user)
+      end
+
+      def remove(user)
+        group.remove(user)
+      end
+
+      private
+
+      def group
+        @group ||= Group.find(:arbitrary_marketing_group)
+      end
+    end
+  end
+end
+
+Audience.register_segment :arbitrary_marketing_group, Audience::Segment::ArbitraryMarketingGroup.new
+```
+
+Now, in addition to iterating through the segment members and checking if a user belongs
+to the segment, we can also add users to the segment and remove them:
+
+```ruby
+user.add_to_segment(:arbitrary_marketing_group)
+user.remove_from_segment(:arbitrary_marketing_group)
+
+# Equivalent
+
+User.segment(:arbitrary_marketing_group).add(user)
+User.segment(:arbitrary_marketing_group).remove(user)
+```
+
+## Reusable Segments
+
+Suppose we want to segment users into 20 different cities, and send a slightly different version
+of a marketing email to each city. We can create one reusable segment, and use that to register 20
+different segments, one for each city. Let's see how we can do that. In this example, we'll use the
+[Postgres earthdistance](https://github.com/diogob/activerecord-postgres-earthdistance) extension.
+
+```ruby
+module Audience
+  module Segment
+    class ByLocation < Base
+      def initialize(latitude:, longitude:, distance: 20)
+        @latitude = latitude
+        @longitude = longitude
+        @distance = distance
+      end
+
+      def members
+        User.within_radius(@distance, @latitude, @longitude)
+      end
+
+      def include?(user)
+        members.where(id: user.id).exists?
+      end
+    end
+  end
+end
+```
+
+Now we can register different segments for different cities:
+
+```ruby
+Audience.register_segment :london, Audience::Segment::ByLocation.new(latitude: 51.508515, longitude: -0.125487)
+Audience.register_segment :los_angeles, Audience::Segment::ByLocation.new(latitude: 34.052234, longitude: -118.243685, distance: 50)
+# etc.
+```
 
 ## Development
 
