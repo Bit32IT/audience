@@ -8,6 +8,12 @@ module Audience
       def include?(_)
         false
       end
+
+      def add(_)
+      end
+
+      def remove(_)
+      end
     end
   end
 end

@@ -11,17 +11,19 @@ module Audience
         raise NotImplementedError
       end
 
-      def include?(user)
+      def include?(_member)
         raise NotImplementedError
       end
 
-      def add(user)
+      def add(_member)
         raise NotImplementedError
       end
 
-      def delete(user)
+      def remove(_member)
         raise NotImplementedError
       end
+
+      alias delete remove
     end
   end
 end
