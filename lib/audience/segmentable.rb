@@ -7,7 +7,7 @@ module Audience
     end
 
     def in_segment?(name)
-      Audience.registry(name).include?(self)
+      Audience.segment(name).include?(self)
     end
 
     def segments
