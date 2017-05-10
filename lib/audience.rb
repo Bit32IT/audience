@@ -35,3 +35,4 @@ require 'audience/segment/base'
 require 'audience/segment/all'
 require 'audience/segment/none'
 require 'audience/segmentable'
+require 'audience/railtie' if defined?(Rails)
