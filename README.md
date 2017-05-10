@@ -70,7 +70,7 @@ Looking in `config/initializers/audience.rb`, we can see that the segment has be
 registered with a unique name.
 
 ```ruby
-Audience.register_segment :loyal_female_millenials, Audience::Segment::LoyalFemaleMillenials.new
+Audience.register_segment :loyal_female_millenials, LoyalFemaleMillenialsSegment.new
 ```
 
 Now we can iterate through all users in this segment like so to send them an email:
