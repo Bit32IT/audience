@@ -14,8 +14,20 @@ module Audience
       Audience.segment(name).add(self)
     end
 
+    def add_to_segments(*names)
+      Array.wrap(names).each do |name|
+        add_to_segment(name)
+      end
+    end
+
     def remove_from_segment(name)
       Audience.segment(name).remove(self)
+    end
+
+    def remove_from_segments(*names)
+      Array.wrap(names).each do |name|
+        remove_from_segment(name)
+      end
     end
 
     def segments
