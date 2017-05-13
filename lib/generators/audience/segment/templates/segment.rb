@@ -11,5 +11,11 @@ class <%= class_name %>Segment < ApplicationSegment
 
   def remove(member)
   end
+
+  def each(&block)
+  end
+
+  def size
+  end
 end
 <% end -%>
