@@ -7,7 +7,7 @@ module Audience
     end
 
     def register_segment
-      append_file 'config/initializers/audience.rb', "Audience.register_segment(:#{file_name}, #{class_name}Segment.new)\n"
+      append_file 'config/initializers/audience.rb', "Audience.register_segment :#{file_name}, #{class_name}Segment.new\n"
     end
   end
 end

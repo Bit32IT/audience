@@ -21,13 +21,19 @@ different segments of your users. And so the madness continues...
 
 With Audience, you can easily create segment definitions which provide a common
 interface for defining and working with user segments. It will keep your code
-organized and keep you from going crazy.
+organized, reduce code repetition, decouple the segmentation interface from its
+implementation, and keep you from going crazy.
 
-After defining a segment, you will be able to iterate through all users in the
-segment, count the number of members, check if a specific user belongs to the segment,
-and add/remove users to the segment. This decouples the segmentation interface from the
-implementation of the underlying grouping, reducing code repetition across your
-application.
+## What can you do with a segment?
+
+After defining a segment, you will be able to do common operations you might
+expect, such as:
+
+ * Iterate through all members in the segment
+ * Count the number of members
+ * Check if a specific user belongs to the segment
+ * Add a user to the segment
+ * Remove a user from the segment
 
 ## Installation
 
