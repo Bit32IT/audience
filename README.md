@@ -1,7 +1,9 @@
 # Audience
 
 Audience allows you to segment your application's users using regular Ruby
-classes. A "segment" is a subgroup that all share certain characteristics.
+classes. [Audience Segmentation](https://en.wikipedia.org/wiki/Audience_segmentation)
+is a process of dividing people into subgroups ("segments") based on defined criteria,
+such as age, geography, gender, income, etc.
 
 Audience is built on Rails, but otherwise does not assume any particular
 database or ORM.
