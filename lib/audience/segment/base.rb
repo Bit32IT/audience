@@ -2,7 +2,7 @@ module Audience
   module Segment
     class Base
       attr_accessor :name
-      delegate :each, :size, to: :members
+      delegate :each, :size, :sample, to: :members
 
       def initialize(*args)
       end

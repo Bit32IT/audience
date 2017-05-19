@@ -33,7 +33,9 @@ expect, such as:
 
  * Iterate through all members in the segment
  * Count the number of members
- * Check if a specific user belongs to the segment
+ * Select a random sample of the segment
+ * Check if a user belongs to the segment
+ * Get a list of a user's segments
  * Add a user to the segment
  * Remove a user from the segment
 
@@ -106,18 +108,24 @@ User.segment(:loyal_female_millenials).each do |user|
 end
 ```
 
-You can check the size of the segment:
+Check the size of the segment:
 
 ```ruby
 User.segment(:loyal_female_millenials).size
 ```
 
-You can also check if a specific user belongs to this segment:
+Check if a specific user belongs to this segment:
 
 ```ruby
 if curent_user.in_segment?(:loyal_female_millenials)
   @show_marketing_blurb = true
 end
+```
+
+Get a random sample of members of this segment:
+
+```ruby
+User.segment(:loyal_female_millenials).sample(100)
 ```
 
 ## Mutable Segments
@@ -236,8 +244,26 @@ class ExampleSegment < ApplicationSegment
     # Defaults to calling members.size. If you need a different or more optimal
     # version, implement this method. Otherwise remove it.
   end
+
+  def sample(size)
+    # Defaults to calling members.sample. If you need a more optimal sampling
+    # implementation, implement this method. Otherwise remove it.
+  end
 end
 ```
+
+## Segmentable Member API
+
+When your member/user class includes `Audience::Segmentable`, it gets the
+following API:
+
+### #in_segment?(name)
+
+Check if a member belongs to the named segment.
+
+### #segment_names
+
+List the names of the segments this member belongs to.
 
 ## Development
 
