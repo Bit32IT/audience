@@ -18,4 +18,4 @@ module Audience
   end
 end
 
-Audience.register_segment(:all, Audience::Segment::All.new)
+Audience.register_segment(:all, Audience::Segment::All)

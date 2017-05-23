@@ -7,13 +7,16 @@ module Audience
   end
 
   class << self
-    def register_segment(name, segment)
-      segment.name = name
-      registry[name] = segment
+    def register_segment(name, segment_klass, *args)
+      registry[name] = [segment_klass, args]
     end
 
     def segment(name)
-      registry.fetch(name, Audience::Segment::None.new)
+      raise ArgumentError unless valid_segment?(name)
+      segment_klass, args = *registry[name]
+      segment_klass.new(*args).tap do |segment|
+        segment.name = name
+      end
     end
 
     def valid_segment?(name)

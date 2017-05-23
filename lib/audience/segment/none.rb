@@ -18,4 +18,4 @@ module Audience
   end
 end
 
-Audience.register_segment(:none, Audience::Segment::None.new)
+Audience.register_segment(:none, Audience::Segment::None)

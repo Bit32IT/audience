@@ -97,7 +97,7 @@ Looking in `config/initializers/audience.rb`, you can see that the segment has b
 registered with a unique name.
 
 ```ruby
-Audience.register_segment :loyal_female_millenials, LoyalFemaleMillenialsSegment.new
+Audience.register_segment :loyal_female_millenials, LoyalFemaleMillenialsSegment
 ```
 
 Now you can iterate through all users in this segment like so to send them an email:
@@ -206,8 +206,8 @@ Now you can register different segments for different cities! Open up
 `config/initializers/audience.rb` and add as many cities as you need:
 
 ```ruby
-Audience.register_segment :london, LocationSegment.new(latitude: 51.508515, longitude: -0.125487)
-Audience.register_segment :los_angeles, LocationSegment.new(latitude: 34.052234, longitude: -118.243685, distance: 50)
+Audience.register_segment :london, LocationSegment, latitude: 51.508515, longitude: -0.125487
+Audience.register_segment :los_angeles, LocationSegment, latitude: 34.052234, longitude: -118.243685, distance: 50
 # etc.
 ```
 
