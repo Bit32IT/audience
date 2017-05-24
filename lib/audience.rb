@@ -28,7 +28,7 @@ module Audience
     end
 
     def segments
-      registry.values
+      registry.keys.map { |name| segment(name) }
     end
   end
 end
